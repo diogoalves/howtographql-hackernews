@@ -73,22 +73,13 @@ class LinkList extends Component {
           }
         }
       `,
-      updateQuery: (previous, { subscriptionData }) => {
-        const newLink = subscriptionData.data.newLink;
-        if(newLink) {
-          const newAllLinks = [newLink.node, ...previous.feed.links]
-          const result = {
-            ...previous,
-            feed: {
-              links: newAllLinks
-            },
-          }
-          return result
-
-        } else {
-          return previous;
+      updateQuery: (previous, { subscriptionData }) => ({
+        ...previous,
+        feed: {
+          ...previous.feed,
+          links: [subscriptionData.data.newLink.node, ...previous.feed.links]
         }
-      },
+      }),
     })
   }
 

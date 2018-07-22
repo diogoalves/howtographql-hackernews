@@ -39,7 +39,7 @@ class CreateLink extends Component {
     await this.props.postMutation({
       variables: {
         description,
-        url
+        url,
       },
       update: (store, { data: { post } }) => {
         const first = LINKS_PER_PAGE
@@ -56,7 +56,7 @@ class CreateLink extends Component {
           data,
           variables: { first, skip, orderBy },
         })
-      }
+      },
     })
     this.props.history.push(`/new/1`)
   }
