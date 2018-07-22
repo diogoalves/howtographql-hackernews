@@ -25,11 +25,7 @@ class LinkList extends Component {
     const indexOffset = isNewPage ? (page-1)*LINKS_PER_PAGE : 0;
     return (
       <div>
-<<<<<<< HEAD
         <div>{linksToRender.map( (link, index) => <Link key={link.id} index={index + indexOffset} link={link} updateStoreAfterVote={this._updateCacheAfterVote}  />)}</div>
-=======
-        <div>{linksToRender.map( (link, index) => <Link key={link.id} index={index + ((page-1)*LINKS_PER_PAGE)} link={link} updateStoreAfterVote={this._updateCacheAfterVote}  />)}</div>
->>>>>>> 96026c45a35b5ff887288968da96338e48dfa0f2
         {isNewPage && (
           <div className='flex ml4 mv3 gray'>
             <div className='pointer mr2' onClick={() => this._previousPage()}>Previous</div>
