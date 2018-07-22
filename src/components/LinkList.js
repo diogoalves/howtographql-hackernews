@@ -22,10 +22,10 @@ class LinkList extends Component {
     const isNewPage = this.props.location.pathname.includes('new')
     const linksToRender = this._getLinksToRender(isNewPage)
     const page = parseInt(this.props.match.params.page, 10)
-
+    const indexOffset = isNewPage ? (page-1)*LINKS_PER_PAGE : 0;
     return (
       <div>
-        <div>{linksToRender.map( (link, index) => <Link key={link.id} index={index} link={link} updateStoreAfterVote={this._updateCacheAfterVote}  />)}</div>
+        <div>{linksToRender.map( (link, index) => <Link key={link.id} index={index + indexOffset} link={link} updateStoreAfterVote={this._updateCacheAfterVote}  />)}</div>
         {isNewPage && (
           <div className='flex ml4 mv3 gray'>
             <div className='pointer mr2' onClick={() => this._previousPage()}>Previous</div>
