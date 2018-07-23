@@ -1,53 +1,27 @@
 const { GraphQLServer } = require('graphql-yoga')
-
-let links = [{
-  id: 'link-0',
-  url: 'www.howtographql.com',
-  description: 'Fullstack tutorial for GraphQL'
-}]
-
-let idCount = links.length;
+const { Prisma } = require('prisma-binding')
+const Query = require('./resolvers/Query')
+const Mutation = require('./resolvers/Mutation')
+const AuthPayload = require('./resolvers/AuthPayload')
 
 const resolvers = {
-  Query: {
-    info: () => `This is the API of a Hackernews Clone`,
-    feed: () => links,
-    link: (root, args) => links.find( e => e.id === args.id),
-  },
-  Mutation: {
-    post: (root, args) => {
-       const link = {
-        id: `link-${idCount++}`,
-        description: args.description,
-        url: args.url,
-      }
-      links.push(link)
-      return link
-    },
-    updateLink: (root, args) => {
-      const foundIndex = links.findIndex( e => e.id === args.id);
-      if(foundIndex > 0) {
-        links[foundIndex].description = args.description;
-        links[foundIndex].url = args.url;
-      }
-      return links[foundIndex];
-    },
-    deleteLink: (root, args) => {
-      const willDelete = links.filter( e => e.id === args.id)[0];
-      links = links.filter( e => e.id !== args.id);
-      return willDelete;
-  },
-  },
-  Link: {
-    id: (root) => root.id,
-    description: (root) => root.description,
-    url: (root) => root.url
-  }
+  Query,
+  Mutation,
+  AuthPayload
 }
 
 const server = new GraphQLServer({
   typeDefs: './src/schema.graphql',
   resolvers,
+  context: req => ({
+    ...req,
+    db: new Prisma({
+      typeDefs: 'src/generated/prisma.graphql',
+      endpoint: 'https://us1.prisma.sh/diogo-alves-b47d59/hackernews-database/dev',
+      secret: 'mysecret123',
+      debug: true,
+    }),
+  }),
 })
 
 server.start(() => console.log(`Server is running on http://localhost:4000`))
